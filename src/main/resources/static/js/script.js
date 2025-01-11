@@ -1,79 +1,81 @@
 console.log("Script loaded");
 
-// Change theme work
+// Get the current theme from localStorage
 let currentTheme = getTheme();
 
-// Initial setup when DOM is loaded
+// Wait until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
   changeTheme();
 });
 
-// Function to handle theme changes
 function changeTheme() {
-  // Set the theme to the web page initially
+  // Apply the initial theme
   changePageTheme(currentTheme, "");
 
-  // Set the listener to the change theme button
+  // Get the change theme button
   const changeThemeButton = document.querySelector("#theme_change_button");
 
+  // Check if the button exists
   if (!changeThemeButton) {
-    console.error("Theme change button (#theme_change_button) not found.");
-    return; // Stop further execution if the button is missing
+    console.error("Error: Change theme button not found in the DOM.");
+    return;
   }
 
-  changeThemeButton.addEventListener("click", (event) => {
-    const oldTheme = currentTheme;
+  // Add a click event listener to toggle the theme
+  changeThemeButton.addEventListener("click", () => {
+    let oldTheme = currentTheme;
     console.log("Change theme button clicked");
 
-    // Toggle between dark and light themes
+    // Toggle theme
     currentTheme = currentTheme === "dark" ? "light" : "dark";
 
-    console.log("Current Theme:", currentTheme);
+    console.log("New Theme:", currentTheme);
 
-    // Apply the theme changes
+    // Apply the new theme
     changePageTheme(currentTheme, oldTheme);
   });
 }
 
-// Function to set theme in local storage
+// Save the current theme to localStorage
 function setTheme(theme) {
   localStorage.setItem("theme", theme);
 }
 
-// Function to get theme from local storage
+// Retrieve the current theme from localStorage
 function getTheme() {
   const theme = localStorage.getItem("theme");
-  return theme || "light"; // Default to "light" if no theme is stored
+  return theme ? theme.trim() : "light"; // Default to "light"
 }
 
-// Function to apply the theme to the current page
+// Apply the theme to the page
 function changePageTheme(theme, oldTheme) {
-  // Update local storage with the current theme
-  setTheme(theme);
-
   const htmlElement = document.querySelector("html");
 
-  // Remove the old theme class if it exists
+  // Ensure the <html> element exists
+  if (!htmlElement) {
+    console.error("Error: <html> element not found in the DOM.");
+    return;
+  }
+
+  // Save the new theme to localStorage
+  setTheme(theme);
+
+  // Remove the old theme class
   if (oldTheme) {
-    htmlElement.classList.remove(oldTheme);
+    htmlElement.classList.remove(oldTheme.trim());
   }
 
   // Add the new theme class
-  htmlElement.classList.add(theme);
+  htmlElement.classList.add(theme.trim());
 
-  // Change the text of the button
-  const changeThemeButton = document.querySelector("#theme_change_button");
-  
-  if (!changeThemeButton) {
-    console.error("Theme change button (#theme_change_button) not found.");
-    return; // Stop further execution if the button is missing
+  // Change the button text
+  const themeButtonSpan = document.querySelector("#theme_change_button span");
+
+  // Check if the span exists
+  if (!themeButtonSpan) {
+    console.error("Error: Button span not found.");
+    return;
   }
 
-  const spanElement = changeThemeButton.querySelector("span");
-  if (!spanElement) {
-    console.error("Span element inside the theme change button not found.");
-    return; // Stop further execution if the <span> is missing
-  }
-
-  spanElement.textContent = theme === "light" ? "Dark" : "Light";
+  themeButtonSpan.textContent = theme === "light" ? " Dark" : " Light";
 }
