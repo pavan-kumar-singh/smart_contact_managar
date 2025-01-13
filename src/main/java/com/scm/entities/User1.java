@@ -1,7 +1,6 @@
 
 package com.scm.entities;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +30,7 @@ public class User1 {
     private String about;
     @Column(length = 5000)
     private String profilePic;
-    @Column(length = 100)
+    @Column(length = 1000)
     private String phone;
     // information
     private boolean enabled=false;
@@ -43,6 +42,6 @@ public class User1 {
     private String providerUserId;
     //add more fields if needed
     @OneToMany(mappedBy = "user" ,cascade = CascadeType.ALL ,fetch = FetchType.LAZY, orphanRemoval = true)
-   private List<contact> contacts= new ArrayList<>();
-    
+    private List<contact> contacts= new ArrayList<>();
+   
 }
